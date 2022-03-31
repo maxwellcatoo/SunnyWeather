@@ -11,7 +11,7 @@ import retrofit2.http.*
 
 /* Retrofit构建器的最佳写法 */
 interface PlaceService {
-    // 在searchPlaces方法上面声明一个GET注解，这样当调用search-Places方法的时候，Retrofit就会自动发起一条GET请求，去访问@GET注解中配置的地址。其中搜索城市数据的API只有query这个参数是需要动态指定的，我们使用@Query注解的方式来进行实现，另外两个参数是不会变得，因此固定写在@GET注解中即可。
+    // 在searchPlaces方法上面声明一个GET注解，这样当调用searchPlaces方法的时候，Retrofit就会自动发起一条GET请求，去访问@GET注解中配置的地址。其中搜索城市数据的API只有query这个参数是需要动态指定的，我们使用@Query注解的方式来进行实现，另外两个参数是不会变得，因此固定写在@GET注解中即可。
     // 另外，searchPlaces()方法的返回值被声明成了Call<PlaceResponse>，这样Retrofit就会将服务器返回的JSON数据自动解析成PlaceResponse对象了。
     @GET("v2/place?token=${SunnyWeatherApplication.TOKEN}&lang=zh_CN")
     fun searchPlaces(@Query("query") query: String): Call<PlaceResponse>
@@ -27,7 +27,7 @@ object ServiceCreator {
     // 每次调用create方法，拿到的都是通过这个retrofit的create方法对象，获取方法如下：
         // val appService = ServiceCreator.create(AppService::class.java)
     fun<T> create(serviceClass: Class<T>): T = retrofit.create(serviceClass)
-    // 相较于上一种方法的进一步改进  泛刑实化功能，使用方法：
+    // 相较于上一种方法的进一步改进  泛型实化功能，使用方法：
         // val appService = ServiceCreator.create<AppService>()
     inline fun <reified T> create(): T = create(T::class.java)
 }
