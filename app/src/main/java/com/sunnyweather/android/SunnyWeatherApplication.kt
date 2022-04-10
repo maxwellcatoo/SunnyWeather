@@ -15,6 +15,7 @@ class SunnyWeatherApplication: Application() {
         lateinit var context: Context
 
         const val TOKEN = "申请到的TOKEN值"
+        const val Key_GAODE = "905e6313ffef596c29552a1e04fb608c"
     }
 
     override fun onCreate() {
