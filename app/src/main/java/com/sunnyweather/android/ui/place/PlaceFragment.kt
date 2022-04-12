@@ -64,7 +64,7 @@ class PlaceFragment: Fragment() {
                 adapter.notifyDataSetChanged()
             }
         }
-        // viewLifecycleOwner那个位置写成this报错，不知道为啥。。。书上写的this，不记得有报错啊。。。难道是哪一个库的版本的原因？
+        // viewLifecycleOwner那个位置写成this报错，不知道为啥。。。书上写的this，不记得有报错啊。。。难道是哪一个库的版本的原因？（如果是在Activity中，继承AppCompatActivity类的话，可以用this）
         viewModel.placeLiveData.observe(viewLifecycleOwner, Observer{ result ->
             val places = result.getOrNull()
             if (places != null) {
