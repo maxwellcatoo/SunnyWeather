@@ -14,8 +14,11 @@ class SunnyWeatherApplication: Application() {
         @SuppressLint("StaticFieldLeak")
         lateinit var context: Context
 
-        const val TOKEN = "申请到的TOKEN值"
-        const val Key_GAODE = "905e6313ffef596c29552a1e04fb608c"
+        const val isGApi = true
+        // 彩云天气api的key值
+        const val TOKEN = "TOKEN值"
+        // 高德地图 天气查询api申请到的key
+        const val G_TOKEN = "905e6313ffef596c29552a1e04fb608c"
     }
 
     override fun onCreate() {

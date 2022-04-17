@@ -7,19 +7,17 @@ import com.sunnyweather.android.logic.Repository
 import com.sunnyweather.android.logic.model.Location
 
 class WeatherViewModel: ViewModel(){
-    private val locationLiveData: MutableLiveData<Location> = MutableLiveData<Location>()
+    private val locationLiveData: MutableLiveData<String> = MutableLiveData<String>()
 
-    var locationLng = ""
-
-    var locationLat = ""
+    var adCode = ""
 
     var placeName = ""
 
-    val weatherViewModel = Transformations.switchMap(locationLiveData) { location ->
-        Repository.refreshWeather(location.lng, location.lat)
+    val weatherViewModel = Transformations.switchMap(locationLiveData) { adCode ->
+        Repository.refreshWeather(adCode)
     }
 
-    fun refreshWeather(lng: String, lat: String) {
-        locationLiveData.value = Location(lng, lat)
+    fun refreshWeather(adCode: String) {
+        locationLiveData.value = adCode
     }
 }

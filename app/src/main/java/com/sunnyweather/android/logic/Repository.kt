@@ -1,6 +1,7 @@
 package com.sunnyweather.android.logic
 
 import androidx.lifecycle.liveData
+import com.sunnyweather.android.logic.model.GWeather
 import com.sunnyweather.android.logic.model.Place
 import com.sunnyweather.android.logic.model.Weather
 import com.sunnyweather.android.logic.newwork.SunnyWeatherNetwork
@@ -68,7 +69,7 @@ object Repository {
         println("hello $query world")
         val placeResponse = SunnyWeatherNetwork.searchPlaces(query) // 取到请求到的数据
         println("hello   ${placeResponse}")
-        if(placeResponse.status == "ok") {
+        if(placeResponse.status == "1") {
             val places = placeResponse.places
             Result.success(places)
         } else {
@@ -76,21 +77,21 @@ object Repository {
         }
     }
 
-    fun refreshWeather(lng: String, lat: String) = fire(Dispatchers.IO) {
+    fun refreshWeather(adCode: String) = fire(Dispatchers.IO) {
             // async函数只能在协程作用域中才能调用，所以这里使用了coroutineScope函数创建了一个协程作用域
             // 使用async的目的是，并发执行两个请求，提高程序的运行效率(并发执行的使用方式！！！)
             coroutineScope {
                 val deferredRealtime = async {
-                    SunnyWeatherNetwork.getRealtimeWeather(lng, lat)
+                    SunnyWeatherNetwork.getRealtimeWeather(adCode)
                 }
 
                 val deferredDaily = async {
-                    SunnyWeatherNetwork.getDailyWeather(lng, lat)
+                    SunnyWeatherNetwork.getDailyWeather(adCode)
                 }
                 val realtimeResponse = deferredRealtime.await()
                 val dailyResponse = deferredDaily.await()
-                if(realtimeResponse.status == "ok" && dailyResponse.status == "ok"){
-                    val weather = Weather(realtimeResponse.result.realtime, dailyResponse.result.daily)
+                if(realtimeResponse.status == "1" && dailyResponse.status == "1"){
+                    val weather = GWeather(realtimeResponse, dailyResponse)
                     Result.success(weather)
                 }else{
                     Result.failure(

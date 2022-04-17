@@ -14,3 +14,7 @@ data class RealtimeResponse(val status: String, val result: Result) {
     data class AQI(val chn: Float)
 
 }
+
+data class GRealtimeResponse(val status: String, val lives: List<Live>) {
+    data class Live(val weather: String, val temperature: String)
+}

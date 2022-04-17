@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.sunnyweather.android.R
+import com.sunnyweather.android.logic.model.GWeather
 import com.sunnyweather.android.logic.model.Weather
 import com.sunnyweather.android.logic.model.getSky
 import kotlinx.android.synthetic.main.activity_weather.*
@@ -33,12 +34,12 @@ class WeatherActivity : AppCompatActivity() {
         window.statusBarColor = Color.TRANSPARENT // 将状态栏设置成透明色
         setContentView(R.layout.activity_weather)
 
-        if (viewModel.locationLng.isEmpty()) {
-            viewModel.locationLng = intent.getStringExtra("location_lng") ?: ""
+        if (viewModel.adCode.isEmpty()) {
+            viewModel.adCode = intent.getStringExtra("ad_code") ?: ""
         }
-        if (viewModel.locationLat.isEmpty()) {
-            viewModel.locationLat = intent.getStringExtra("location_lat") ?: ""
-        }
+//        if (viewModel.locationLat.isEmpty()) {
+//            viewModel.locationLat = intent.getStringExtra("location_lat") ?: ""
+//        }
         if (viewModel.placeName.isNotEmpty()) {
             viewModel.placeName = intent.getStringExtra("place_name") ?: ""
         }
@@ -53,48 +54,54 @@ class WeatherActivity : AppCompatActivity() {
             }
         })
         // 下面这行代码会触发上面那个代码块运行，从而更新显示天气信息或弹窗报错
-        viewModel.refreshWeather(viewModel.locationLng, viewModel.locationLat)
+        viewModel.refreshWeather(viewModel.adCode)
     }
 
     /**
      * 在控件中显示天气信息
      */
-    private fun showWeatherInfo(weather: Weather) {
+    private fun showWeatherInfo(weather: GWeather) {
         placeName.text = viewModel.placeName
-        val realtime = weather.realtime
+        val realtime = weather.realtime.lives[0]
         val daily = weather.daily
         // 填充now.xml布局中的数据
-        val currentTempText = "${realtime.temperature.toInt()} °C"
+        val currentTempText = "${realtime.temperature} °C"
         currentTemp.text = currentTempText
-        currentSky.text = getSky(realtime.skycon).info
-        val currentPM25Text = "空气指数 ${realtime.airQuality.aqi.chn.toInt()}"
+        currentSky.text = getSky(realtime.weather).info
+        val currentPM25Text = "空气指数 ${"未知"}"
         currentAQI.text = currentPM25Text
-        nowLayout.setBackgroundColor(getSky(realtime.skycon).bg)
+        nowLayout.setBackgroundColor(getSky(realtime.weather).bg)
         // 填充forecast.xml布局中的数据
         forecastLayout.removeAllViews()
-        val days = daily.skycon.size
+        val days = daily.forcecasts.size
         for(i in 0 until days) {
-            val skycon = daily.skycon[i]
-            val temperature = daily.temperature[i]
+            val skycon = daily.forcecasts[i].dayweather
+            val dayTemperature = daily.forcecasts[i].daytemp
+            val nightTemperature = daily.forcecasts[i].nighttemp
             val view = LayoutInflater.from(this).inflate(R.layout.forecast_item, forecastLayout, false)
             val dateInfo = view.findViewById(R.id.dateInfo) as TextView
             val skyIcon = view.findViewById(R.id.skyIcon) as ImageView
             val skyInfo = view.findViewById(R.id.skyInfo) as TextView
             val temperatureInfo = view.findViewById(R.id.temperatureInfo) as TextView
-            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            dateInfo.text = simpleDateFormat.format(skycon.date)
-            val sky = getSky(skycon.value)
+//            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+//            dateInfo.text = simpleDateFormat.format(skycon.date)
+            dateInfo.text = daily.forcecasts[i].date
+            val sky = getSky("未知")
             skyIcon.setImageResource(sky.icon)
-            val tempText = "${temperature.min.toInt()} ~ ${temperature.max.toInt()} °C"
+            val tempText = "$nightTemperature ~ $dayTemperature °C"
             temperatureInfo.text = tempText
             forecastLayout.addView(view)
         }
         // 填充life_index.xml布局中的数据
-        val lifeIndex = daily.lifeIndex
-        coldRiskText.text = lifeIndex.coldRisk[0].desc
-        dressingText.text = lifeIndex.ultraviolet[0].desc
-        ultravioletText.text = lifeIndex.ultraviolet[0].desc
-        carWashingText.text = lifeIndex.carWashing[0].desc
+//        val lifeIndex = daily.lifeIndex
+//        coldRiskText.text = lifeIndex.coldRisk[0].desc
+//        dressingText.text = lifeIndex.ultraviolet[0].desc
+//        ultravioletText.text = lifeIndex.ultraviolet[0].desc
+//        carWashingText.text = lifeIndex.carWashing[0].desc
+        coldRiskText.text = "0"
+        dressingText.text = "0"
+        ultravioletText.text = "0"
+        carWashingText.text = "0"
         weatherLayout.visibility = View.VISIBLE
     }
 }
