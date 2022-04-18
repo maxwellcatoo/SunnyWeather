@@ -53,7 +53,6 @@ class PlaceFragment: Fragment() {
         // androidx.core:core-ktx:1.0.0   1.0.0版本没有下面这行的addTextChangedListener这样的用法。。。
         // 必须要把版本升到1.1.0版本才行。。。晕，卡了好久，无语了，书上也不写详细点。。。
         searchPlaceEdit.addTextChangedListener{ editable ->
-            println("hello 监听到输入框数据变化，值为$editable")
             val content = editable.toString()
             if(content.isNotEmpty()) {
                 viewModel.searchPlace(content)

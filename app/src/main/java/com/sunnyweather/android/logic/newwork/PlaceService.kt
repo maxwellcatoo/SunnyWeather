@@ -19,7 +19,7 @@ interface PlaceService {
     fun searchPlaces(@Query("query") query: String): Call<PlaceResponse>
 
     /*高德地图api接口*/
-    @GET("/v3/place/text?key=${SunnyWeatherApplication.G_TOKEN}&extensions=all")
+    @GET("/v3/place/text?extensions=all&key=${SunnyWeatherApplication.G_TOKEN}")
     fun searchGPlaces(
         @Query("keywords") keywords: String,
 //        @Query("city") city: String?,

@@ -70,14 +70,14 @@ class WeatherActivity : AppCompatActivity() {
         currentSky.text = getSky(realtime.weather).info
         val currentPM25Text = "空气指数 ${"未知"}"
         currentAQI.text = currentPM25Text
-        nowLayout.setBackgroundColor(getSky(realtime.weather).bg)
+        nowLayout.setBackgroundResource(getSky(realtime.weather).bg)
         // 填充forecast.xml布局中的数据
         forecastLayout.removeAllViews()
-        val days = daily.forcecasts.size
+        val days = daily.forecasts[0].casts.size
         for(i in 0 until days) {
-            val skycon = daily.forcecasts[i].dayweather
-            val dayTemperature = daily.forcecasts[i].daytemp
-            val nightTemperature = daily.forcecasts[i].nighttemp
+            val skycon = daily.forecasts[0].casts[i].dayweather
+            val dayTemperature = daily.forecasts[0].casts[i].daytemp
+            val nightTemperature = daily.forecasts[0].casts[i].nighttemp
             val view = LayoutInflater.from(this).inflate(R.layout.forecast_item, forecastLayout, false)
             val dateInfo = view.findViewById(R.id.dateInfo) as TextView
             val skyIcon = view.findViewById(R.id.skyIcon) as ImageView
@@ -85,8 +85,8 @@ class WeatherActivity : AppCompatActivity() {
             val temperatureInfo = view.findViewById(R.id.temperatureInfo) as TextView
 //            val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 //            dateInfo.text = simpleDateFormat.format(skycon.date)
-            dateInfo.text = daily.forcecasts[i].date
-            val sky = getSky("未知")
+            dateInfo.text = daily.forecasts[0].casts[i].date
+            val sky = getSky(skycon)
             skyIcon.setImageResource(sky.icon)
             val tempText = "$nightTemperature ~ $dayTemperature °C"
             temperatureInfo.text = tempText

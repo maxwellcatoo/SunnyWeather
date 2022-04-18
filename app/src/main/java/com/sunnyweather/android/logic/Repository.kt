@@ -66,9 +66,7 @@ object Repository {
 
     // 使用fire方法处理
     fun searchPlaces(query: String) = fire(Dispatchers.IO) {
-        println("hello $query world")
         val placeResponse = SunnyWeatherNetwork.searchPlaces(query) // 取到请求到的数据
-        println("hello   ${placeResponse}")
         if(placeResponse.status == "1") {
             val places = placeResponse.places
             Result.success(places)

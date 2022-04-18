@@ -28,12 +28,13 @@ class PlaceAdapter(private val fragment: Fragment, private val placeList: List<G
             val position = holder.bindingAdapterPosition
             val place = placeList[position]
             val intent = Intent(parent.context, WeatherActivity::class.java).apply {
-                putExtra("location_lng", place.location.split(",")[0])
-                putExtra("location_lat", place.location.split(",")[1])
-                putExtra("place_name", place.run{cityname + adname + address})
+//                putExtra("location_lng", place.location.split(",")[0])
+//                putExtra("location_lat", place.location.split(",")[1])
+                putExtra("place_name", place.run{pname + cityname + adname + address})
+                putExtra("ad_code", place.adcode)
             }
             fragment.startActivity(intent)
-            fragment.activity?.finish()
+//            fragment.activity?.finish() // 这里不要销毁，不然就返回不到查询页面了
         }
         return holder
     }
@@ -41,7 +42,7 @@ class PlaceAdapter(private val fragment: Fragment, private val placeList: List<G
     override fun onBindViewHolder(holder: ViewHolder,position: Int) {
         val place = placeList[position]
         holder.placeName.text = place.name
-        holder.placeAddress.text = place.run{cityname + adname + address}
+        holder.placeAddress.text = place.run{pname + cityname + adname + address}
     }
 
     override fun getItemCount() = placeList.size

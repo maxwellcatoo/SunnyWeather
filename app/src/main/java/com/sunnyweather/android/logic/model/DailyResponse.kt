@@ -18,6 +18,7 @@ data class DailyResponse(val status: String, val result: Result) {
     data class LifeDescription(val desc: String)
 }
 
-data class GDailyResponse(val status: String, val forcecasts: List<ForceCast>) {
-    data class ForceCast(val daytemp: String, val nighttemp: String, val dayweather: String, val date: String)
+data class GDailyResponse(val status: String, val forecasts: List<ForeCast>) {
+    data class ForeCast(val casts: List<Cast>)
+    data class Cast(val daytemp: String, val nighttemp: String, val dayweather: String, val date: String)
 }
